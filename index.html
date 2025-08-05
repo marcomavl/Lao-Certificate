@@ -10,12 +10,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Phetsarath+OT:wght@400;700&display=swap" rel="stylesheet">
+    <!-- jsPDF and html2canvas for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: 'Phetsarath OT', 'Inter', sans-serif;
             background-color: #f0f2f5;
-        }
-        .page-container {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -75,139 +76,130 @@
         }
         .btn-primary { background-color: #3b82f6; color: white; }
         .btn-primary:hover { background-color: #2563eb; box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2); }
+        .btn-primary:disabled { background-color: #9ca3af; cursor: not-allowed; }
         
-        /* Styles for printing */
-        @media print {
-            body {
-                background-color: #fff;
-                padding: 0;
-                margin: 0;
-            }
-            .page-container {
-                padding: 0;
-            }
-            .a4-container {
-                box-shadow: none;
-                border-radius: 0;
-                width: 210mm;
-                height: 297mm;
-                margin: 0;
-            }
-            #pdfButtonsContainer {
-                display: none !important;
-            }
-            input[type="text"], textarea {
-                border-bottom: 1px dotted #000 !important;
-            }
-            /* Ensure uploaded photo prints correctly */
-            #photoPreview {
-                display: block !important;
-            }
+        .message-box {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            font-family: 'Inter', sans-serif;
         }
+        .message-box.show { opacity: 1; transform: translateX(0); }
+        .message-box.info { background-color: #3b82f6; }
+        .message-box.success { background-color: #22c55e; }
+        .message-box.error { background-color: #ef4444; }
+
     </style>
 </head>
 <body>
-    <div class="page-container">
-        <div id="form-content" class="a4-container">
-            <!-- Header Section -->
-            <header class="mb-3">
-                <div class="text-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Emblem_of_Laos.svg/800px-Emblem_of_Laos.svg.png" alt="Emblem of Laos" class="h-20 w-auto object-contain mb-2 mx-auto" crossorigin="anonymous">
-                    <p>ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ</p>
-                    <p class="font-bold">ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນະຖາວອນ</p>
-                </div>
-                <div class="flex justify-between items-start mt-3">
-                    <div class="w-2/3">
-                        <p>ແຂວງ: <input type="text" id="provinceHeader" class="input-lg" readonly></p>
-                        <p>ເມືອງ: <input type="text" id="districtHeader" class="input-lg" readonly></p>
-                        <p>ບ້ານ: <input type="text" id="villageHeader" class="input-lg" readonly></p>
-                    </div>
-                    <div class="w-1/3 flex justify-end">
-                        <!-- Changed: Photo upload area -->
-                        <div id="photoBox" class="w-24 h-32 border border-gray-400 rounded-md flex-shrink-0 relative cursor-pointer bg-gray-50 hover:bg-gray-100">
-                            <img id="photoPreview" class="w-full h-full object-cover rounded-md hidden" alt="Uploaded photo">
-                            <div id="photoPlaceholder" class="w-full h-full flex items-center justify-center text-gray-500 text-xs text-center">
-                                <span>ກົດເພື່ອເລືອກຮູບ<br>(3x4)</span>
-                            </div>
-                            <input type="file" id="photoUpload" class="hidden" accept="image/*">
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <div class="text-center my-3">
-                <h1 class="text-2xl font-bold text-gray-800 mb-1" style="font-family: 'Phetsarath OT', sans-serif;">ໃບຢັ້ງຢືນທີ່ຢູ່</h1>
-                <p>ເລກທີ: <input type="text" id="certificateNo" class="input-sm text-center"></p>
+    <div id="form-content" class="a4-container">
+        <!-- Header Section -->
+        <header class="mb-3">
+            <div class="text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Emblem_of_Laos.svg/800px-Emblem_of_Laos.svg.png" alt="Emblem of Laos" class="h-20 w-auto object-contain mb-2 mx-auto" crossorigin="anonymous">
+                <p>ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ</p>
+                <p class="font-bold">ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນະຖາວອນ</p>
             </div>
-
-            <!-- Main Content -->
-            <main class="flex-grow">
-                <p class="mb-2">
-                    ນາຍບ້ານ: <input type="text" id="villageHeadName" class="input-xl">,
-                    ເມືອງ: <input type="text" id="villageHeadDistrict" class="input-md">,
-                    ແຂວງ: <input type="text" id="villageHeadProvince" class="input-md">
-                </p>
-                <p class="mb-2">
-                    ຂໍຢັ້ງຢືນວ່າ ທ້າວ ຫຼື ນາງ: <input type="text" id="applicantName" class="input-xxl">
-                    ອາຍຸ: <input type="text" id="applicantAge" class="input-xxs"> ປີ,
-                    ອາຊີບ: <input type="text" id="applicantOccupation" class="input-lg">
-                </p>
-                <p class="mb-2">
-                    ສັນຊາດ: <input type="text" id="applicantNationality" class="input-md" value="ລາວ">
-                </p>
-                <p class="mb-2">
-                    ປະຈຸບັນຢູ່ບ້ານ: <input type="text" id="currentVillage" class="input-lg">
-                    ຄຸ້ມ: <input type="text" id="currentQuarters" class="input-md">
-                    ໜ່ວຍ: <input type="text" id="currentUnit" class="input-xs">
-                    ເຮືອນເລກທີ: <input type="text" id="houseNo" class="input-sm">
-                </p>
-                <p class="mb-2">
-                    ໄດ້ຈົດເຂົ້າສໍາມະໂນຄົວເລກທີ: <input type="text" id="householdRegNo" class="input-md">
-                    ລົງວັນທີ: <input type="text" id="regDay" class="input-xxs">/<input type="text" id="regMonth" class="input-xxs">/<input type="text" id="regYear" class="input-xs">
-                </p>
-                <p class="mb-2">
-                    ເປັນລູກຂອງທ້າວ: <input type="text" id="fatherName" class="input-lg">
-                    ແລະ ນາງ: <input type="text" id="motherName" class="input-lg">
-                </p>
-                <p class="mb-3">
-                    ທີ່ບ້ານ: <input type="text" id="parentVillage" class="input-lg">
-                    ເມືອງ: <input type="text" id="parentDistrict" class="input-md">
-                    ແຂວງ: <input type="text" id="parentProvince" class="input-md">
-                </p>
-                <p class="mb-3">
-                    ຜູ້ກ່ຽວຢູ່ໃນຄວາມຮັບຜິດຊອບຂອງພວກເຮົາ ແລະ ຢູ່ໃນການຈັດຕັ້ງຂອງພວກເຮົາແທ້ຈິງ. ດັ່ງນັ້ນ, ຈຶ່ງອອກໃບຢັ້ງຢືນສະບັບນີ້ໃຫ້ຜູ້ກ່ຽວໄວ້ເປັນຫຼັກຖານ, ຖ້າຜູ້ກ່ຽວບໍ່ມີພຶດຕິກຳທີ່ຕໍ່ຕ້ານກັບປະຊາຊົນ ແລະ ການປົກຄອງຂອງລັດແລ້ວ, ຂໍໃຫ້ພະນັກງານທີ່ກ່ຽວຂ້ອງໄດ້ອໍານວຍຄວາມສະດວກຕາມທາງທີ່ຄວນດ້ວຍ.
-                </p>
-                <p class="mb-3">
-                    ໃບຢັ້ງຢືນສະບັບນີ້ໃຊ້ເພື່ອ:
-                    <textarea id="purpose" rows="1" class="input-full"></textarea>
-                </p>
-                <p class="mb-3">
-                    ແລະ ຢັ້ງຢືນວ່າຜູ້ກ່ຽວຢູ່ໃນຄວາມປົກຄອງຂອງພວກເຮົາ ຢ່າງແທ້ຈິງ.
-                </p>
-            </main>
-
-            <!-- Signature Section -->
-            <footer class="flex justify-end pt-4">
-                <div class="flex flex-col items-center w-1/2 text-center">
-                    <p class="mb-2">
-                        ວັນທີ: <input type="text" id="signDay" class="input-xxs">/<input type="text" id="signMonth" class="input-xxs">/<input type="text" id="signYear" class="input-xs">
-                    </p>
-                    <p class="font-bold mb-8">ນາຍບ້ານ</p>
-                    <p>(<input type="text" id="villageHeadSignatureName" class="input-lg text-center" readonly>)</p>
+            <div class="flex justify-between items-start mt-3">
+                <div class="w-2/3">
+                    <p>ແຂວງ: <input type="text" id="provinceHeader" class="input-lg" readonly></p>
+                    <p>ເມືອງ: <input type="text" id="districtHeader" class="input-lg" readonly></p>
+                    <p>ບ້ານ: <input type="text" id="villageHeader" class="input-lg" readonly></p>
                 </div>
-            </footer>
+                <div class="w-1/3 flex justify-end">
+                    <div id="photoBox" class="w-24 h-32 border border-gray-400 rounded-md flex-shrink-0 relative cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <img id="photoPreview" class="w-full h-full object-cover rounded-md hidden" alt="Uploaded photo">
+                        <div id="photoPlaceholder" class="w-full h-full flex items-center justify-center text-gray-500 text-xs text-center">
+                            <span>ກົດເພື່ອເລືອກຮູບ<br>(3x4)</span>
+                        </div>
+                        <input type="file" id="photoUpload" class="hidden" accept="image/*">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="text-center my-3">
+            <h1 class="text-2xl font-bold text-gray-800 mb-1" style="font-family: 'Phetsarath OT', sans-serif;">ໃບຢັ້ງຢືນທີ່ຢູ່</h1>
+            <p>ເລກທີ: <input type="text" id="certificateNo" class="input-sm text-center"></p>
         </div>
+
+        <!-- Main Content -->
+        <main class="flex-grow">
+            <p class="mb-2">
+                ນາຍບ້ານ: <input type="text" id="villageHeadName" class="input-xl">,
+                ເມືອງ: <input type="text" id="villageHeadDistrict" class="input-md">,
+                ແຂວງ: <input type="text" id="villageHeadProvince" class="input-md">
+            </p>
+            <p class="mb-2">
+                ຂໍຢັ້ງຢືນວ່າ ທ້າວ ຫຼື ນາງ: <input type="text" id="applicantName" class="input-xxl">
+                ອາຍຸ: <input type="text" id="applicantAge" class="input-xxs"> ປີ,
+                ອາຊີບ: <input type="text" id="applicantOccupation" class="input-lg">
+            </p>
+            <p class="mb-2">
+                ສັນຊາດ: <input type="text" id="applicantNationality" class="input-md" value="ລາວ">
+            </p>
+            <p class="mb-2">
+                ປະຈຸບັນຢູ່ບ້ານ: <input type="text" id="currentVillage" class="input-lg">
+                ຄຸ້ມ: <input type="text" id="currentQuarters" class="input-md">
+                ໜ່ວຍ: <input type="text" id="currentUnit" class="input-xs">
+                ເຮືອນເລກທີ: <input type="text" id="houseNo" class="input-sm">
+            </p>
+            <p class="mb-2">
+                ໄດ້ຈົດເຂົ້າສໍາມະໂນຄົວເລກທີ: <input type="text" id="householdRegNo" class="input-md">
+                ລົງວັນທີ: <input type="text" id="regDay" class="input-xxs">/<input type="text" id="regMonth" class="input-xxs">/<input type="text" id="regYear" class="input-xs">
+            </p>
+            <p class="mb-2">
+                ເປັນລູກຂອງທ້າວ: <input type="text" id="fatherName" class="input-lg">
+                ແລະ ນາງ: <input type="text" id="motherName" class="input-lg">
+            </p>
+            <p class="mb-3">
+                ທີ່ບ້ານ: <input type="text" id="parentVillage" class="input-lg">
+                ເມືອງ: <input type="text" id="parentDistrict" class="input-md">
+                ແຂວງ: <input type="text" id="parentProvince" class="input-md">
+            </p>
+            <p class="mb-3">
+                ຜູ້ກ່ຽວຢູ່ໃນຄວາມຮັບຜິດຊອບຂອງພວກເຮົາ ແລະ ຢູ່ໃນການຈັດຕັ້ງຂອງພວກເຮົາແທ້ຈິງ. ດັ່ງນັ້ນ, ຈຶ່ງອອກໃບຢັ້ງຢືນສະບັບນີ້ໃຫ້ຜູ້ກ່ຽວໄວ້ເປັນຫຼັກຖານ, ຖ້າຜູ້ກ່ຽວບໍ່ມີພຶດຕິກຳທີ່ຕໍ່ຕ້ານກັບປະຊາຊົນ ແລະ ການປົກຄອງຂອງລັດແລ້ວ, ຂໍໃຫ້ພະນັກງານທີ່ກ່ຽວຂ້ອງໄດ້ອໍານວຍຄວາມສະດວກຕາມທາງທີ່ຄວນດ້ວຍ.
+            </p>
+            <p class="mb-3">
+                ໃບຢັ້ງຢືນສະບັບນີ້ໃຊ້ເພື່ອ:
+                <textarea id="purpose" rows="1" class="input-full"></textarea>
+            </p>
+            <p class="mb-3">
+                ແລະ ຢັ້ງຢືນວ່າຜູ້ກ່ຽວຢູ່ໃນຄວາມປົກຄອງຂອງພວກເຮົາ ຢ່າງແທ້ຈິງ.
+            </p>
+        </main>
+
+        <!-- Signature Section -->
+        <footer class="flex justify-end pt-4">
+            <div class="flex flex-col items-center w-1/2 text-center">
+                <p class="mb-2">
+                    ວັນທີ: <input type="text" id="signDay" class="input-xxs">/<input type="text" id="signMonth" class="input-xxs">/<input type="text" id="signYear" class="input-xs">
+                </p>
+                <p class="font-bold mb-8">ນາຍບ້ານ</p>
+                <p>(<input type="text" id="villageHeadSignatureName" class="input-lg text-center" readonly>)</p>
+            </div>
+        </footer>
     </div>
-        <!-- Buttons are now outside the A4 container for better print handling -->
-        <div class="flex justify-center space-x-4 mt-4" id="pdfButtonsContainer">
-            <button onclick="window.print()" class="btn btn-primary">
-                <svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                ບັນທຶກເປັນ PDF
-            </button>
-        </div>
     
+    <!-- Buttons are now outside the A4 container -->
+    <div class="flex justify-center space-x-4 mt-4" id="pdfButtonsContainer">
+        <button onclick="generatePdf()" class="btn btn-primary" id="downloadPdfBtn">
+            <svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            ດາວໂຫຼດ PDF
+        </button>
+    </div>
 
     <script>
+        const { jsPDF } = window.jspdf;
+
         // --- DOM Element References ---
         const purposeTextarea = document.getElementById('purpose');
         const villageHeadNameInput = document.getElementById('villageHeadName');
@@ -218,12 +210,16 @@
         const provinceHeaderInput = document.getElementById('provinceHeader');
         const districtHeaderInput = document.getElementById('districtHeader');
         const villageHeaderInput = document.getElementById('villageHeader');
-        // Added: Photo upload elements
         const photoBox = document.getElementById('photoBox');
         const photoUploadInput = document.getElementById('photoUpload');
         const photoPreviewImg = document.getElementById('photoPreview');
         const photoPlaceholder = document.getElementById('photoPlaceholder');
 
+        // --- Custom Message Box Function ---
+        function showMessageBox(message, type = 'info', duration = 3000) {
+            // This function can be expanded to show a proper UI element
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
 
         // --- Textarea Auto-Resize Function ---
         function autoResizeTextarea() {
@@ -249,7 +245,6 @@
             purposeTextarea.addEventListener('input', autoResizeTextarea);
             autoResizeTextarea();
 
-            // Added: Photo upload functionality
             photoBox.addEventListener('click', () => {
                 photoUploadInput.click();
             });
@@ -266,6 +261,68 @@
                     reader.readAsDataURL(file);
                 }
             });
+        }
+
+        // --- PDF Generation Logic ---
+        async function generatePdf() {
+            const formContent = document.getElementById('form-content');
+            const pdfButtonsContainer = document.getElementById('pdfButtonsContainer');
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            
+            showMessageBox('ກຳລັງສ້າງ PDF...', 'info');
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = 'ກະລຸນາລໍຖ້າ...';
+
+            pdfButtonsContainer.style.display = 'none';
+
+            try {
+                const canvas = await html2canvas(formContent, {
+                    scale: 2.5, // Balanced scale for quality and file size
+                    useCORS: true, 
+                    logging: false,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.9); // Use JPEG for smaller size
+                
+                const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const canvasAspectRatio = canvasWidth / canvasHeight;
+                const pdfAspectRatio = pdfWidth / pdfHeight;
+
+                let finalWidth, finalHeight;
+
+                // Check if the canvas aspect ratio is wider than the PDF's
+                if (canvasAspectRatio > pdfAspectRatio) {
+                    finalWidth = pdfWidth;
+                    finalHeight = pdfWidth / canvasAspectRatio;
+                } else {
+                    finalHeight = pdfHeight;
+                    finalWidth = pdfHeight * canvasAspectRatio;
+                }
+
+                // Center the image on the page
+                const x = (pdfWidth - finalWidth) / 2;
+                const y = (pdfHeight - finalHeight) / 2;
+
+                pdf.addImage(imgData, 'JPEG', x, y, finalWidth, finalHeight);
+                pdf.save('ໃບຢັ້ງຢືນທີ່ຢູ່.pdf');
+                
+                showMessageBox('ດາວໂຫຼດ PDF ສຳເລັດ!', 'success');
+
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+                showMessageBox('ເກີດຂໍ້ຜິດພາດໃນການສ້າງ PDF.', 'error');
+            } finally {
+                pdfButtonsContainer.style.display = 'flex';
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>ດາວໂຫຼດ PDF';
+            }
         }
 
         // --- Initialize the form when the DOM is fully loaded ---
