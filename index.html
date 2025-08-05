@@ -35,7 +35,7 @@
             line-height: 1.8;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="date"], textarea {
             border: none;
             border-bottom: 1px dotted #6b7280;
             padding: 0px 1px;
@@ -47,7 +47,7 @@
             font-family: inherit;
             background-color: transparent;
         }
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
             outline: none;
             border-bottom: 1px solid #3b82f6;
         }
@@ -65,6 +65,7 @@
         .input-xl { width: 130px; }
         .input-xxl { width: 160px; }
         .input-full { width: 100%; }
+        .input-date { width: 150px; }
 
         .btn {
             padding: 10px 20px;
@@ -154,7 +155,7 @@
             </p>
             <p class="mb-2">
                 ໄດ້ຈົດເຂົ້າສໍາມະໂນຄົວເລກທີ: <input type="text" id="householdRegNo" class="input-md">
-                ລົງວັນທີ: <input type="text" id="regDay" class="input-xxs">/<input type="text" id="regMonth" class="input-xxs">/<input type="text" id="regYear" class="input-xs">
+                ລົງວັນທີ: <input type="date" id="regDate" class="input-date">
             </p>
             <p class="mb-2">
                 ເປັນລູກຂອງທ້າວ: <input type="text" id="fatherName" class="input-lg">
@@ -181,12 +182,12 @@
         <footer class="flex justify-end pt-4">
             <div class="flex flex-col items-center w-1/2 text-center">
                 <p class="mb-2">
-                    ວັນທີ: <input type="text" id="signDay" class="input-xxs">/<input type="text" id="signMonth" class="input-xxs">/<input type="text" id="signYear" class="input-xs">
+                    ວັນທີ: <input type="date" id="signDate" class="input-date">
                 </p>
                 <p class="font-bold mb-8">ນາຍບ້ານ</p>
                 <p>(<input type="text" id="villageHeadSignatureName" class="input-lg text-center" readonly>)</p>
-            </div>
-        </footer>
+            </footer>
+        </div>
     </div>
     
     <!-- Buttons are now outside the A4 container -->
@@ -217,7 +218,7 @@
 
         // --- Custom Message Box Function ---
         function showMessageBox(message, type = 'info', duration = 3000) {
-            // This function can be expanded to show a proper UI element
+            // This can be replaced with a more sophisticated UI element
             console.log(`${type.toUpperCase()}: ${message}`);
         }
 
@@ -230,9 +231,11 @@
         // --- Auto-population and Initialization Logic ---
         function initializeForm() {
             const today = new Date();
-            document.getElementById('signDay').value = String(today.getDate()).padStart(2, '0');
-            document.getElementById('signMonth').value = String(today.getMonth() + 1).padStart(2, '0');
-            document.getElementById('signYear').value = today.getFullYear();
+            // Format date as YYYY-MM-DD for the date input
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('signDate').value = `${year}-${month}-${day}`;
 
             villageHeadNameInput.addEventListener('input', () => {
                 villageHeadSignatureNameInput.value = villageHeadNameInput.value;
@@ -293,20 +296,16 @@
                 const canvasWidth = canvas.width;
                 const canvasHeight = canvas.height;
                 const canvasAspectRatio = canvasWidth / canvasHeight;
-                const pdfAspectRatio = pdfWidth / pdfHeight;
 
-                let finalWidth, finalHeight;
+                // Calculate the dimensions to fit the image on the PDF page while maintaining aspect ratio
+                let finalWidth = pdfWidth;
+                let finalHeight = pdfWidth / canvasAspectRatio;
 
-                // Check if the canvas aspect ratio is wider than the PDF's
-                if (canvasAspectRatio > pdfAspectRatio) {
-                    finalWidth = pdfWidth;
-                    finalHeight = pdfWidth / canvasAspectRatio;
-                } else {
+                if (finalHeight > pdfHeight) {
                     finalHeight = pdfHeight;
                     finalWidth = pdfHeight * canvasAspectRatio;
                 }
-
-                // Center the image on the page
+                
                 const x = (pdfWidth - finalWidth) / 2;
                 const y = (pdfHeight - finalHeight) / 2;
 
