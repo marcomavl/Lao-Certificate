@@ -1,390 +1,348 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="lo">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.2">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #6d6d6d; background-color: #ecf1f7}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #6b0001; background-color: #ecf1f7}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #fb0007; background-color: #ecf1f7}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #0000ff; background-color: #ecf1f7}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; background-color: #ecf1f7}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #4d5055; background-color: #ecf1f7}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #18702b; background-color: #ecf1f7}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; background-color: #ffffff; min-height: 16.0px}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #000000; background-color: #ecf1f7; min-height: 16.0px}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #093c94; background-color: #ecf1f7}
-    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px 'Lao Sangam MN'; color: #000000; background-color: #ecf1f7}
-    span.s1 {color: #fb0007}
-    span.s2 {color: #2a2a2a}
-    span.s3 {color: #000000}
-    span.s4 {color: #0000ff}
-    span.s5 {color: #6b0001}
-    span.s6 {font: 14.0px 'Lao Sangam MN'}
-    span.s7 {color: #093c94}
-    span.s8 {color: #137646}
-    span.s9 {color: #18702b}
-    span.s10 {color: #6f0ec3}
-    span.s11 {font: 14.0px Menlo}
-    span.s12 {font: 14.0px Menlo; color: #2a2a2a}
-    span.s13 {font: 14.0px Menlo; color: #6b0001}
-    span.s14 {font: 14.0px 'Lao Sangam MN'; color: #000000}
-    span.s15 {color: #a4450b}
-    span.s16 {color: #0e6e6d}
-    span.s17 {font: 14.0px 'Lao Sangam MN'; color: #18702b}
-    span.s18 {color: #4d5055}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ໃບຢັ້ງຢືນທີ່ຢູ່</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Phetsarath OT for Lao script and Inter for general UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Phetsarath+OT:wght@400;700&display=swap" rel="stylesheet">
+    <!-- jsPDF and html2canvas for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Phetsarath OT', 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .a4-container {
+            background-color: #fff;
+            width: 210mm;
+            min-height: 297mm;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            /* This container now only provides the white page background */
+            padding: 0; 
+            box-sizing: border-box;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        /* New wrapper to control content margins and width */
+        .content-wrapper {
+            /* Height is now 100% minus 60mm (3cm top + 3cm bottom) */
+            width: calc(100% - 40mm); /* 2cm left/right margins */
+            height: calc(100% - 60mm); /* 3cm top/bottom margins */
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"], textarea {
+            border: none;
+            border-bottom: 1px dotted #6b7280;
+            padding: 0px 1px;
+            border-radius: 0;
+            width: auto;
+            display: inline-block;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            font-size: inherit;
+            font-family: inherit;
+            background-color: transparent;
+            line-height: 1.5;
+        }
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-bottom: 1px solid #3b82f6;
+            box-shadow: none;
+        }
+        textarea {
+            resize: none;
+            overflow: hidden;
+            vertical-align: bottom;
+        }
+        
+        .input-xxs { width: 25px; text-align: center; } 
+        .input-xs { width: 35px; text-align: center; }
+        .input-sm { width: 45px; text-align: center; }
+        .input-md { width: 55px; }
+        .input-lg { width: 70px; }
+        .input-xl { width: 110px; }
+        .input-xxl { width: 140px; }
+        .input-full { width: 100%; }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary { background-color: #3b82f6; color: white; }
+        .btn-primary:hover { background-color: #2563eb; box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2); }
+        .btn-primary:disabled { background-color: #9ca3af; cursor: not-allowed; }
+        
+        .message-box {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            font-family: 'Inter', sans-serif;
+        }
+        .message-box.show { opacity: 1; transform: translateX(0); }
+        .message-box.info { background-color: #3b82f6; }
+        .message-box.success { background-color: #22c55e; }
+        .message-box.error { background-color: #ef4444; }
+
+        @media print {
+            body { background-color: #fff; padding: 0; }
+            .a4-container { box-shadow: none; border-radius: 0; width: 100%; min-height: auto; }
+            #pdfButtonsContainer { display: none !important; }
+            input[type="text"], textarea { border-bottom: 1px dotted #000 !important; }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE<span class="s1"> html</span>&gt;</p>
-<p class="p2"><span class="s2">&lt;</span>html<span class="s3"> </span><span class="s1">lang</span><span class="s2">=</span><span class="s4">"lo"</span><span class="s2">&gt;</span></p>
-<p class="p2"><span class="s2">&lt;</span>head<span class="s2">&gt;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">meta</span><span class="s3"> </span>charset<span class="s2">=</span><span class="s4">"UTF-8"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">meta</span><span class="s3"> </span><span class="s1">name</span><span class="s2">=</span>"viewport"<span class="s3"> </span><span class="s1">content</span><span class="s2">=</span>"width=device-width, initial-scale=1.0"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">    </span><span class="s2">&lt;</span><span class="s5">title</span><span class="s2">&gt;</span><span class="s6">ໃບຢັ້ງຢືນທີ່ຢູ່</span><span class="s2">&lt;/</span><span class="s5">title</span><span class="s2">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">    </span></span>&lt;!-- Tailwind CSS CDN --&gt;</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">script</span><span class="s3"> </span><span class="s1">src</span><span class="s2">=</span>"https://cdn.tailwindcss.com"<span class="s2">&gt;&lt;/</span><span class="s5">script</span><span class="s2">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">    </span></span>&lt;!-- Google Fonts: Phetsarath OT for Lao script and Inter for general UI --&gt;</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">link</span><span class="s3"> </span><span class="s1">rel</span><span class="s2">=</span>"preconnect"<span class="s3"> </span><span class="s1">href</span><span class="s2">=</span>"https://fonts.googleapis.com"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">link</span><span class="s3"> </span><span class="s1">rel</span><span class="s2">=</span>"preconnect"<span class="s3"> </span><span class="s1">href</span><span class="s2">=</span>"https://fonts.gstatic.com"<span class="s3"> </span><span class="s1">crossorigin</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">link</span><span class="s3"> </span><span class="s1">href</span><span class="s2">=</span>"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Phetsarath+OT:wght@400;700&amp;display=swap"<span class="s3"> </span><span class="s1">rel</span><span class="s2">=</span>"stylesheet"<span class="s2">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">    </span></span>&lt;!-- jsPDF and html2canvas for PDF generation --&gt;</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">script</span><span class="s3"> </span><span class="s1">src</span><span class="s2">=</span>"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"<span class="s2">&gt;&lt;/</span><span class="s5">script</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">script</span><span class="s3"> </span><span class="s1">src</span><span class="s2">=</span>"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"<span class="s2">&gt;&lt;/</span><span class="s5">script</span><span class="s2">&gt;</span></p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span>style<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">body</span> {</p>
-<p class="p7"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s1">font-family:</span><span class="s3"> </span>'Phetsarath OT'<span class="s3">, </span>'Inter'<span class="s3">, </span><span class="s7">sans-serif</span><span class="s3">;</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>background-color:<span class="s3"> </span><span class="s7">#f0f2f5</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">display:</span> <span class="s7">flex</span>;</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>justify-content:<span class="s3"> </span><span class="s7">center</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">align-items:</span> <span class="s7">flex-start</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">min-height:</span> <span class="s8">100vh</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">padding:</span> <span class="s8">20px</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>.a4-container<span class="s3"> {</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>background-color:<span class="s3"> </span><span class="s7">#fff</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">width:</span> <span class="s8">210mm</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">min-height:</span> <span class="s8">297mm</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">box-shadow:</span> <span class="s8">0</span> <span class="s8">4px</span> <span class="s8">12px</span> <span class="s7">rgba(</span><span class="s8">0</span>, <span class="s8">0</span>, <span class="s8">0</span>, <span class="s8">0.1</span><span class="s7">)</span>;</p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span>/* This container now only provides the white page background */</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">padding:</span> <span class="s8">0</span>;<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">box-sizing:</span> <span class="s7">border-box</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border-radius:</span> <span class="s8">12px</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">display:</span> <span class="s7">flex</span>;</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>justify-content:<span class="s3"> </span><span class="s7">center</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">align-items:</span> <span class="s7">center</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">position:</span> <span class="s7">relative</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>/* New wrapper to control content margins and width */</p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>.content-wrapper<span class="s3"> {</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span>/* Height is now 100% minus 60mm (3cm top + 3cm bottom) */</p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s1">width:</span><span class="s3"> </span><span class="s7">calc(</span><span class="s8">100%</span><span class="s3"> - </span><span class="s8">40mm</span><span class="s7">)</span><span class="s3">; </span>/* 2cm left/right margins */</p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s1">height:</span><span class="s3"> </span><span class="s7">calc(</span><span class="s8">100%</span><span class="s3"> - </span><span class="s8">60mm</span><span class="s7">)</span><span class="s3">; </span>/* 3cm top/bottom margins */</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">display:</span> <span class="s7">flex</span>;</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>flex-direction:<span class="s3"> </span><span class="s7">column</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">input</span>[<span class="s7">type</span>=<span class="s9">"text"</span>], <span class="s5">textarea</span> {</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border:</span> <span class="s7">none</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border-bottom:</span> <span class="s8">1px</span> <span class="s7">dotted</span> <span class="s7">#6b7280</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">padding:</span> <span class="s8">0px</span> <span class="s8">1px</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border-radius:</span> <span class="s8">0</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">width:</span> <span class="s7">auto</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">display:</span> <span class="s7">inline-block</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">box-sizing:</span> <span class="s7">border-box</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">transition:</span> <span class="s7">border-color</span> <span class="s8">0.2s</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">font-size:</span> <span class="s7">inherit</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">font-family:</span> <span class="s7">inherit</span>;</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>background-color:<span class="s3"> </span><span class="s7">transparent</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">line-height:</span> <span class="s8">1.5</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>input<span class="s3">[</span><span class="s7">type</span><span class="s3">=</span><span class="s9">"text"</span><span class="s3">]</span>:focus<span class="s3">, </span>textarea:focus<span class="s3"> {</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">outline:</span> <span class="s7">none</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border-bottom:</span> <span class="s8">1px</span> <span class="s7">solid</span> <span class="s7">#3b82f6</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">box-shadow:</span> <span class="s7">none</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">textarea</span> {</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">resize:</span> <span class="s7">none</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">overflow:</span> <span class="s7">hidden</span>;</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span>vertical-align:<span class="s3"> </span><span class="s7">bottom</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p9"><span class="Apple-converted-space">        </span></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-xxs</span> { <span class="s1">width:</span> <span class="s8">25px</span>; <span class="s1">text-align:</span> <span class="s7">center</span>; }<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-xs</span> { <span class="s1">width:</span> <span class="s8">35px</span>; <span class="s1">text-align:</span> <span class="s7">center</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-sm</span> { <span class="s1">width:</span> <span class="s8">45px</span>; <span class="s1">text-align:</span> <span class="s7">center</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-md</span> { <span class="s1">width:</span> <span class="s8">55px</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-lg</span> { <span class="s1">width:</span> <span class="s8">70px</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-xl</span> { <span class="s1">width:</span> <span class="s8">110px</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-xxl</span> { <span class="s1">width:</span> <span class="s8">140px</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.input-full</span> { <span class="s1">width:</span> <span class="s8">100%</span>; }</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.btn</span> {</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">padding:</span> <span class="s8">10px</span> <span class="s8">20px</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border-radius:</span> <span class="s8">8px</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">font-weight:</span> <span class="s8">600</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">cursor:</span> <span class="s7">pointer</span>;</p>
-<p class="p10"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s1">transition:</span><span class="s3"> </span>background-color<span class="s3"> </span><span class="s8">0.2s</span><span class="s3">, </span>box-shadow<span class="s3"> </span><span class="s8">0.2s</span><span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">font-family:</span> <span class="s9">'Inter'</span>, <span class="s7">sans-serif</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s5">.btn-primary</span><span class="s3"> { </span>background-color:<span class="s3"> </span><span class="s7">#3b82f6</span><span class="s3">; </span>color:<span class="s3"> </span><span class="s7">white</span><span class="s3">; }</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s5">.btn-primary:hover</span><span class="s3"> { </span>background-color:<span class="s3"> </span><span class="s7">#2563eb</span><span class="s3">; </span>box-shadow:<span class="s3"> </span><span class="s8">0</span><span class="s3"> </span><span class="s8">4px</span><span class="s3"> </span><span class="s8">8px</span><span class="s3"> </span><span class="s7">rgba(</span><span class="s8">59</span><span class="s3">, </span><span class="s8">130</span><span class="s3">, </span><span class="s8">246</span><span class="s3">, </span><span class="s8">0.2</span><span class="s7">)</span><span class="s3">; }</span></p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s5">.btn-primary:disabled</span><span class="s3"> { </span>background-color:<span class="s3"> </span><span class="s7">#9ca3af</span><span class="s3">; </span>cursor:<span class="s3"> </span><span class="s7">not-allowed</span><span class="s3">; }</span></p>
-<p class="p9"><span class="Apple-converted-space">        </span></p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>.message-box<span class="s3"> {</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">position:</span> <span class="s7">fixed</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">top:</span> <span class="s8">4rem</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">right:</span> <span class="s8">1rem</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">padding:</span> <span class="s8">1rem</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">border-radius:</span> <span class="s8">0.5rem</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">box-shadow:</span> <span class="s8">0</span> <span class="s8">4px</span> <span class="s8">6px</span> <span class="s7">rgba(</span><span class="s8">0</span>, <span class="s8">0</span>, <span class="s8">0</span>, <span class="s8">0.1</span><span class="s7">)</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">color:</span> <span class="s7">white</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">z-index:</span> <span class="s8">1000</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">opacity:</span> <span class="s8">0</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">transform:</span> <span class="s7">translateX(</span><span class="s8">100%</span><span class="s7">)</span>;</p>
-<p class="p10"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s1">transition:</span><span class="s3"> </span>opacity<span class="s3"> </span><span class="s8">0.3s</span><span class="s3"> </span>ease-in-out<span class="s3">, </span>transform<span class="s3"> </span><span class="s8">0.3s</span><span class="s3"> </span>ease-in-out<span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s1">font-family:</span> <span class="s9">'Inter'</span>, <span class="s7">sans-serif</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s5">.message-box.show</span> { <span class="s1">opacity:</span> <span class="s8">1</span>; <span class="s1">transform:</span> <span class="s7">translateX(</span><span class="s8">0</span><span class="s7">)</span>; }</p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>.message-box.info<span class="s3"> { </span><span class="s1">background-color:</span><span class="s3"> </span><span class="s7">#3b82f6</span><span class="s3">; }</span></p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>.message-box.success<span class="s3"> { </span><span class="s1">background-color:</span><span class="s3"> </span><span class="s7">#22c55e</span><span class="s3">; }</span></p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">        </span></span>.message-box.error<span class="s3"> { </span><span class="s1">background-color:</span><span class="s3"> </span><span class="s7">#ef4444</span><span class="s3">; }</span></p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">        </span>@<span class="s5">media</span> <span class="s5">print</span> {</p>
-<p class="p5"><span class="Apple-converted-space">            </span>body { <span class="s1">background-color:</span> <span class="s7">#fff</span>; <span class="s1">padding:</span> <span class="s8">0</span>; }</p>
-<p class="p3"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s5">.a4-container</span><span class="s3"> { </span>box-shadow:<span class="s3"> </span><span class="s7">none</span><span class="s3">; </span>border-radius:<span class="s3"> </span><span class="s8">0</span><span class="s3">; </span>width:<span class="s3"> </span><span class="s8">100%</span><span class="s3">; </span>min-height:<span class="s3"> </span><span class="s7">auto</span><span class="s3">; }</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s5">#pdfButtonsContainer</span> { <span class="s1">display:</span> <span class="s7">none</span> <span class="s10">!important</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s5">input</span>[<span class="s7">type</span>=<span class="s9">"text"</span>], <span class="s5">textarea</span> { <span class="s1">border-bottom:</span> <span class="s8">1px</span> <span class="s7">dotted</span> <span class="s7">#000</span> <span class="s10">!important</span>; }</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;/</span>style<span class="s2">&gt;</span></p>
-<p class="p2"><span class="s2">&lt;/</span>head<span class="s2">&gt;</span></p>
-<p class="p2"><span class="s2">&lt;</span>body<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"form-content"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"a4-container"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"content-wrapper"<span class="s2">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span>&lt;!-- Header Section --&gt;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;</span><span class="s5">header</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-3"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"text-center text-sm"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s2">&lt;</span><span class="s5">img</span><span class="s3"> </span><span class="s1">src</span><span class="s2">=</span>"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Emblem_of_Laos.svg/800px-Emblem_of_Laos.svg.png"<span class="s3"> </span><span class="s1">alt</span><span class="s2">=</span>"Emblem of Laos"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"h-20 w-auto object-contain mb-2 mx-auto"<span class="s3"> </span><span class="s1">crossorigin</span><span class="s2">=</span>"anonymous"<span class="s2">&gt;</span></p>
-<p class="p11"><span class="s11"><span class="Apple-converted-space">                    </span></span><span class="s12">&lt;</span><span class="s13">p</span><span class="s12">&gt;</span>ສາທາລະນະລັດ<span class="s11"> </span>ປະຊາທິປະໄຕ<span class="s11"> </span>ປະຊາຊົນລາວ<span class="s12">&lt;/</span><span class="s13">p</span><span class="s12">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"font-bold"</span><span class="s2">&gt;</span><span class="s6">ສັນຕິພາບ</span> <span class="s6">ເອກະລາດ</span> <span class="s6">ປະຊາທິປະໄຕ</span> <span class="s6">ເອກະພາບ</span> <span class="s6">ວັດທະນະຖາວອນ</span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"flex justify-between items-start mt-3 text-sm"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;</span><span class="s5">div</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"w-2/3"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                        </span><span class="s2">&lt;</span><span class="s5">p</span><span class="s2">&gt;</span><span class="s6">ແຂວງ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"provinceHeader"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span> <span class="s1">readonly</span><span class="s2">&gt;&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                        </span><span class="s2">&lt;</span><span class="s5">p</span><span class="s2">&gt;</span><span class="s6">ເມືອງ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"districtHeader"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span> <span class="s1">readonly</span><span class="s2">&gt;&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                        </span><span class="s2">&lt;</span><span class="s5">p</span><span class="s2">&gt;</span><span class="s6">ບ້ານ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"villageHeader"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span> <span class="s1">readonly</span><span class="s2">&gt;&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"w-1/3 flex justify-end"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                        </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"w-24 h-32 border border-gray-400 flex items-center justify-center text-gray-500 text-xs rounded-md flex-shrink-0"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                            </span><span class="s6">ຕິດຮູບ</span><span class="s2">&lt;</span><span class="s5">br</span><span class="s2">&gt;</span>3x4</p>
-<p class="p5"><span class="Apple-converted-space">                        </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;/</span><span class="s5">header</span><span class="s2">&gt;</span></p>
-<p class="p8"><br></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"text-center my-3"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                </span></span><span class="s2">&lt;</span><span class="s5">h1</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"text-2xl font-bold text-gray-800 mb-1"<span class="s3"> </span><span class="s1">style</span><span class="s2">=</span>"font-family: 'Phetsarath OT', sans-serif;"<span class="s2">&gt;</span><span class="s14">ໃບຢັ້ງຢືນທີ່ຢູ່</span><span class="s2">&lt;/</span><span class="s5">h1</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                </span></span><span class="s2">&lt;</span><span class="s5">p</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"text-base"<span class="s2">&gt;</span><span class="s14">ເລກທີ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"certificateNo"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-sm text-center"<span class="s2">&gt;&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span>&lt;!-- Main Content --&gt;</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;</span><span class="s5">main</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"flex-grow"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ນາຍບ້ານ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"villageHeadName"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-xl"</span><span class="s2">&gt;</span>,</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ເມືອງ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"villageHeadDistrict"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-md"<span class="s2">&gt;</span><span class="s3">,</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ແຂວງ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"villageHeadProvince"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-md"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">                </span></span>&lt;!-- Changed: Removed whitespace-nowrap to allow wrapping --&gt;</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ຂໍຢັ້ງຢືນວ່າ</span> <span class="s6">ທ້າວ</span> <span class="s6">ຫຼື</span> <span class="s6">ນາງ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"applicantName"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-xxl"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ອາຍຸ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"applicantAge"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-xxs"</span><span class="s2">&gt;</span> <span class="s6">ປີ</span>,</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ອາຊີບ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"applicantOccupation"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-lg"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ສັນຊາດ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"applicantNationality"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-md"<span class="s3"> </span><span class="s1">value</span><span class="s2">=</span>"<span class="s6">ລາວ</span>"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ປະຈຸບັນຢູ່ບ້ານ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"currentVillage"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ຄຸ້ມ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"currentQuarters"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-md"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ໜ່ວຍ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"currentUnit"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-xs"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ເຮືອນເລກທີ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"houseNo"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-sm"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ໄດ້ຈົດເຂົ້າສໍາມະໂນຄົວເລກທີ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"householdRegNo"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-md"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ລົງວັນທີ</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"regDay"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-xxs mx-1"<span class="s2">&gt;</span><span class="s14">ເດືອນ</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"regMonth"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-xxs mx-1"<span class="s2">&gt;</span><span class="s14">ປີ</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"regYear"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-xs ml-1"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ເປັນລູກຂອງທ້າວ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"fatherName"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ແລະ</span> <span class="s6">ນາງ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"motherName"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-3"</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s6">ທີ່ບ້ານ</span>: <span class="s2">&lt;</span><span class="s5">input</span> <span class="s1">type</span><span class="s2">=</span><span class="s4">"text"</span> <span class="s1">id</span><span class="s2">=</span><span class="s4">"parentVillage"</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"input-lg"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ເມືອງ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"parentDistrict"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-md"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s14">ແຂວງ</span><span class="s3">: </span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"parentProvince"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-md"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-3"</span><span class="s2">&gt;</span></p>
-<p class="p11"><span class="s11"><span class="Apple-converted-space">                    </span></span>ຜູ້ກ່ຽວຢູ່ໃນຄວາມຮັບຜິດຊອບຂອງພວກເຮົາ<span class="s11"> </span>ແລະ<span class="s11"> </span>ຢູ່ໃນການຈັດຕັ້ງຂອງພວກເຮົາແທ້ຈິງ<span class="s11">.</span><span class="s12">&lt;</span><span class="s13">br</span><span class="s12">&gt;</span>ດັ່ງນັ້ນ<span class="s11">, </span>ຈຶ່ງອອກໃບຢັ້ງຢືນສະບັບນີ້ໃຫ້ຜູ້ກ່ຽວໄວ້ເປັນຫຼັກຖານ<span class="s11">, </span>ຖ້າຜູ້ກ່ຽວບໍ່ມີພຶດຕິກຳທີ່ຕໍ່ຕ້ານກັບປະຊາຊົນ<span class="s11"> </span>ແລະ<span class="s11"> </span>ການປົກຄອງຂອງລັດແລ້ວ<span class="s11">,</span><span class="s12">&lt;</span><span class="s13">br</span><span class="s12">&gt;</span>ຂໍໃຫ້ພະນັກງານທີ່ກ່ຽວຂ້ອງໄດ້ອໍານວຍຄວາມສະດວກຕາມທາງທີ່ຄວນດ້ວຍ<span class="s11">.</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-3"</span><span class="s2">&gt;</span></p>
-<p class="p11"><span class="s11"><span class="Apple-converted-space">                    </span></span>ໃບຢັ້ງຢືນສະບັບນີ້ໃຊ້ເພື່ອ<span class="s11">:</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s2">&lt;</span><span class="s5">textarea</span><span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"purpose"<span class="s3"> </span><span class="s1">rows</span><span class="s2">=</span>"1"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-full"<span class="s2">&gt;&lt;/</span><span class="s5">textarea</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-3"</span><span class="s2">&gt;</span></p>
-<p class="p11"><span class="s11"><span class="Apple-converted-space">                    </span></span>ແລະ<span class="s11"> </span>ຢັ້ງຢືນວ່າຜູ້ກ່ຽວຢູ່ໃນຄວາມປົກຄອງຂອງພວກເຮົາ<span class="s11"> </span>ຢ່າງແທ້ຈິງ<span class="s11">.</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;/</span><span class="s5">main</span><span class="s2">&gt;</span></p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span>&lt;!-- Signature Section --&gt;</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s2">&lt;</span><span class="s5">footer</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"flex justify-end pt-4"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"flex flex-col items-center w-1/2 text-center"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"mb-2"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                        </span></span><span class="s14">ວັນທີ</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"signDay"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-xxs mx-1"<span class="s2">&gt;</span><span class="s14">ເດືອນ</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"signMonth"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-xxs mx-1"<span class="s2">&gt;</span><span class="s14">ປີ</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"signYear"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-xs ml-1"<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span><span class="s2">&lt;</span><span class="s5">p</span> <span class="s1">class</span><span class="s2">=</span><span class="s4">"font-bold mb-8"</span><span class="s2">&gt;</span><span class="s6">ນາຍບ້ານ</span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                    </span></span><span class="s2">&lt;</span><span class="s5">p</span><span class="s2">&gt;</span><span class="s3">(</span><span class="s2">&lt;</span><span class="s5">input</span><span class="s3"> </span><span class="s1">type</span><span class="s2">=</span>"text"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"villageHeadSignatureName"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"input-lg text-center"<span class="s3"> </span><span class="s1">readonly</span><span class="s2">&gt;</span><span class="s3">)</span><span class="s2">&lt;/</span><span class="s5">p</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;/</span><span class="s5">footer</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">         </span></span>&lt;!-- Buttons are outside the content wrapper but inside the A4 container --&gt;</p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">&lt;</span><span class="s5">div</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"flex justify-center space-x-4 mt-4"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"pdfButtonsContainer"<span class="s3"> </span><span class="s1">style</span><span class="s2">=</span>"position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">            </span></span><span class="s2">&lt;</span><span class="s5">button</span><span class="s3"> </span><span class="s1">onclick</span><span class="s2">=</span>"generatePdf()"<span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"btn btn-primary"<span class="s3"> </span><span class="s1">id</span><span class="s2">=</span>"downloadPdfBtn"<span class="s2">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">                </span></span><span class="s2">&lt;</span><span class="s5">svg</span><span class="s3"> </span><span class="s1">class</span><span class="s2">=</span>"inline-block w-5 h-5 mr-2"<span class="s3"> </span><span class="s1">fill</span><span class="s2">=</span>"none"<span class="s3"> </span><span class="s1">stroke</span><span class="s2">=</span>"currentColor"<span class="s3"> </span><span class="s1">viewBox</span><span class="s2">=</span>"0 0 24 24"<span class="s3"> </span><span class="s1">xmlns</span><span class="s2">=</span>"http://www.w3.org/2000/svg"<span class="s2">&gt;&lt;</span><span class="s5">path</span><span class="s3"> </span><span class="s1">stroke-linecap</span><span class="s2">=</span>"round"<span class="s3"> </span><span class="s1">stroke-linejoin</span><span class="s2">=</span>"round"<span class="s3"> </span><span class="s1">stroke-width</span><span class="s2">=</span>"2"<span class="s3"> </span><span class="s1">d</span><span class="s2">=</span>"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"<span class="s2">&gt;&lt;/</span><span class="s5">path</span><span class="s2">&gt;&lt;/</span><span class="s5">svg</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s6">ດາວໂຫຼດ</span> PDF</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s2">&lt;/</span><span class="s5">button</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">    </span><span class="s2">&lt;/</span><span class="s5">div</span><span class="s2">&gt;</span></p>
-<p class="p8"><br></p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;</span>script<span class="s2">&gt;</span></p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> { jsPDF } = window.jspdf;</p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>// --- DOM Element References ---</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> downloadBtn = document.getElementById(<span class="s9">'downloadPdfBtn'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> purposeTextarea = document.getElementById(<span class="s9">'purpose'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> villageHeadNameInput = document.getElementById(<span class="s9">'villageHeadName'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> villageHeadSignatureNameInput = document.getElementById(<span class="s9">'villageHeadSignatureName'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> villageHeadDistrictInput = document.getElementById(<span class="s9">'villageHeadDistrict'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> villageHeadProvinceInput = document.getElementById(<span class="s9">'villageHeadProvince'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> currentVillageInput = document.getElementById(<span class="s9">'currentVillage'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> provinceHeaderInput = document.getElementById(<span class="s9">'provinceHeader'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> districtHeaderInput = document.getElementById(<span class="s9">'districtHeader'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">const</span> villageHeaderInput = document.getElementById(<span class="s9">'villageHeader'</span>);</p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>// --- Custom Message Box Function ---</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">function</span> showMessageBox(message, type = <span class="s9">'info'</span>, duration = <span class="s15">3000</span>) {</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">const</span> existingBox = document.querySelector(<span class="s9">'.message-box'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">if</span> (existingBox) existingBox.remove();</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">const</span> messageBox = document.createElement(<span class="s9">'div'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>messageBox.className = <span class="s9">`message-box </span>${type}<span class="s9">`</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span>messageBox.textContent = message;</p>
-<p class="p5"><span class="Apple-converted-space">            </span>document.body.appendChild(messageBox);</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; messageBox.classList.add(<span class="s9">'show'</span>), <span class="s15">10</span>);</p>
-<p class="p9"><span class="Apple-converted-space">            </span></p>
-<p class="p5"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
-<p class="p5"><span class="Apple-converted-space">                </span>messageBox.classList.remove(<span class="s9">'show'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">                </span>messageBox.addEventListener(<span class="s9">'transitionend'</span>, () =&gt; messageBox.remove(), { once: <span class="s10">true</span> });</p>
-<p class="p5"><span class="Apple-converted-space">            </span>}, duration);</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>// --- Textarea Auto-Resize Function ---</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">function</span> autoResizeTextarea() {</p>
-<p class="p5"><span class="Apple-converted-space">            </span>purposeTextarea.style.height = <span class="s9">'auto'</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span>purposeTextarea.style.height = purposeTextarea.scrollHeight + <span class="s9">'px'</span>;</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>// --- Auto-population and Initialization Logic ---</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">function</span> initializeForm() {</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">const</span> today = <span class="s10">new</span> <span class="s16">Date</span>();</p>
-<p class="p5"><span class="Apple-converted-space">            </span>document.getElementById(<span class="s9">'signDay'</span>).value = <span class="s16">String</span>(today.getDate()).padStart(<span class="s15">2</span>, <span class="s9">'0'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>document.getElementById(<span class="s9">'signMonth'</span>).value = <span class="s16">String</span>(today.getMonth() + <span class="s15">1</span>).padStart(<span class="s15">2</span>, <span class="s9">'0'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>document.getElementById(<span class="s9">'signYear'</span>).value = today.getFullYear();</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span>villageHeadNameInput.addEventListener(<span class="s9">'input'</span>, () =&gt; {</p>
-<p class="p5"><span class="Apple-converted-space">                </span>villageHeadSignatureNameInput.value = villageHeadNameInput.value;</p>
-<p class="p5"><span class="Apple-converted-space">            </span>});</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span>villageHeadProvinceInput.addEventListener(<span class="s9">'input'</span>, () =&gt; provinceHeaderInput.value = villageHeadProvinceInput.value);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>villageHeadDistrictInput.addEventListener(<span class="s9">'input'</span>, () =&gt; districtHeaderInput.value = villageHeadDistrictInput.value);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>currentVillageInput.addEventListener(<span class="s9">'input'</span>, () =&gt; villageHeaderInput.value = currentVillageInput.value);</p>
-<p class="p9"><span class="Apple-converted-space">            </span></p>
-<p class="p5"><span class="Apple-converted-space">            </span>purposeTextarea.addEventListener(<span class="s9">'input'</span>, autoResizeTextarea);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>autoResizeTextarea();</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>// --- PDF Generation Logic ---</p>
-<p class="p5"><span class="Apple-converted-space">        </span><span class="s10">async</span> <span class="s10">function</span> generatePdf() {</p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">            </span></span>// Changed: Target the new content-wrapper for capture</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">const</span> formContent = document.querySelector(<span class="s9">'.content-wrapper'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">const</span> pdfButtonsContainer = document.getElementById(<span class="s9">'pdfButtonsContainer'</span>);</p>
-<p class="p9"><span class="Apple-converted-space">            </span></p>
-<p class="p5"><span class="Apple-converted-space">            </span>showMessageBox(<span class="s9">'</span><span class="s17">ກຳລັງສ້າງ</span><span class="s9"> PDF...'</span>, <span class="s9">'info'</span>);</p>
-<p class="p5"><span class="Apple-converted-space">            </span>downloadBtn.disabled = <span class="s10">true</span>;</p>
-<p class="p5"><span class="Apple-converted-space">            </span>downloadBtn.innerHTML = <span class="s9">'</span><span class="s17">ກະລຸນາລໍຖ້າ</span><span class="s9">...'</span>;</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span>pdfButtonsContainer.style.display = <span class="s9">'none'</span>;</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span><span class="s10">try</span> {</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> canvas = <span class="s10">await</span> html2canvas(formContent, {</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>scale: <span class="s15">3</span>,<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span>useCORS: <span class="s10">true</span>,<span class="Apple-converted-space"> </span></p>
-<p class="p5"><span class="Apple-converted-space">                    </span>logging: <span class="s10">false</span>,</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>allowTaint: <span class="s10">true</span>,</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>backgroundColor: <span class="s9">'#ffffff'</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span>});</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> imgData = canvas.toDataURL(<span class="s9">'image/png'</span>);<span class="Apple-converted-space"> </span></p>
-<p class="p9"><span class="Apple-converted-space">                </span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> pdf = <span class="s10">new</span> jsPDF({ orientation: <span class="s9">'p'</span>, unit: <span class="s9">'mm'</span>, format: <span class="s9">'a4'</span> });</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> pdfWidth = pdf.internal.pageSize.getWidth();</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> pdfHeight = pdf.internal.pageSize.getHeight();</p>
-<p class="p9"><span class="Apple-converted-space">                </span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">                </span></span>// Changed: Define separate vertical and horizontal margins</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> marginTopBottom = <span class="s15">30</span>; <span class="s18">// 3cm</span></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> marginLeftRight = <span class="s15">20</span>; <span class="s18">// 2cm</span></p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> contentWidth = pdfWidth - (marginLeftRight * <span class="s15">2</span>);</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> contentHeight = pdfHeight - (marginTopBottom * <span class="s15">2</span>);</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> canvasWidth = canvas.width;</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> canvasHeight = canvas.height;</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> canvasAspectRatio = canvasWidth / canvasHeight;</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> contentAspectRatio = contentWidth / contentHeight;</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">let</span> finalImgWidth, finalImgHeight;</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">if</span> (canvasAspectRatio &gt; contentAspectRatio) {</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>finalImgWidth = contentWidth;</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>finalImgHeight = finalImgWidth / canvasAspectRatio;</p>
-<p class="p5"><span class="Apple-converted-space">                </span>} <span class="s10">else</span> {</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>finalImgHeight = contentHeight;</p>
-<p class="p5"><span class="Apple-converted-space">                    </span>finalImgWidth = finalImgHeight * canvasAspectRatio;</p>
-<p class="p5"><span class="Apple-converted-space">                </span>}</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> x = marginLeftRight + (contentWidth - finalImgWidth) / <span class="s15">2</span>;</p>
-<p class="p5"><span class="Apple-converted-space">                </span><span class="s10">const</span> y = marginTopBottom + (contentHeight - finalImgHeight) / <span class="s15">2</span>;</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">                </span>pdf.addImage(imgData, <span class="s9">'PNG'</span>, x, y, finalImgWidth, finalImgHeight);</p>
-<p class="p5"><span class="Apple-converted-space">                </span>pdf.save(<span class="s9">'</span><span class="s17">ໃບຢັ້ງຢືນທີ່ຢູ່</span><span class="s9">.pdf'</span>);</p>
-<p class="p9"><span class="Apple-converted-space">                </span></p>
-<p class="p5"><span class="Apple-converted-space">                </span>showMessageBox(<span class="s9">'</span><span class="s17">ດາວໂຫຼດ</span><span class="s9"> PDF </span><span class="s17">ສຳເລັດ</span><span class="s9">!'</span>, <span class="s9">'success'</span>);</p>
-<p class="p8"><br></p>
-<p class="p5"><span class="Apple-converted-space">            </span>} <span class="s10">catch</span> (error) {</p>
-<p class="p5"><span class="Apple-converted-space">                </span>console.error(<span class="s9">"Error generating PDF:"</span>, error);</p>
-<p class="p7"><span class="s3"><span class="Apple-converted-space">                </span>showMessageBox(</span>'<span class="s6">ເກີດຂໍ້ຜິດພາດໃນການສ້າງ</span> PDF.'<span class="s3">, </span>'error'<span class="s3">);</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span>} <span class="s10">finally</span> {</p>
-<p class="p5"><span class="Apple-converted-space">                </span>pdfButtonsContainer.style.display = <span class="s9">'flex'</span>;</p>
-<p class="p5"><span class="Apple-converted-space">                </span>downloadBtn.disabled = <span class="s10">false</span>;</p>
-<p class="p7"><span class="s3"><span class="Apple-converted-space">                </span>downloadBtn.innerHTML = </span>'&lt;svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"&gt;&lt;/path&gt;&lt;/svg&gt;<span class="s6">ດາວໂຫຼດ</span> PDF'<span class="s3">;</span></p>
-<p class="p5"><span class="Apple-converted-space">            </span>}</p>
-<p class="p5"><span class="Apple-converted-space">        </span>}</p>
-<p class="p8"><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span>// --- Initialize the form when the DOM is fully loaded ---</p>
-<p class="p5"><span class="Apple-converted-space">        </span>document.addEventListener(<span class="s9">'DOMContentLoaded'</span>, initializeForm);</p>
-<p class="p2"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s2">&lt;/</span>script<span class="s2">&gt;</span></p>
-<p class="p2"><span class="s2">&lt;/</span>body<span class="s2">&gt;</span></p>
-<p class="p2"><span class="s2">&lt;/</span>html<span class="s2">&gt;</span></p>
+    <div id="form-content" class="a4-container">
+        <div class="content-wrapper">
+            <!-- Header Section -->
+            <header class="mb-3">
+                <div class="text-center text-sm">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Emblem_of_Laos.svg/800px-Emblem_of_Laos.svg.png" alt="Emblem of Laos" class="h-20 w-auto object-contain mb-2 mx-auto" crossorigin="anonymous">
+                    <p>ສາທາລະນະລັດ ປະຊາທິປະໄຕ ປະຊາຊົນລາວ</p>
+                    <p class="font-bold">ສັນຕິພາບ ເອກະລາດ ປະຊາທິປະໄຕ ເອກະພາບ ວັດທະນະຖາວອນ</p>
+                </div>
+                <div class="flex justify-between items-start mt-3 text-sm">
+                    <div class="w-2/3">
+                        <p>ແຂວງ: <input type="text" id="provinceHeader" class="input-lg" readonly></p>
+                        <p>ເມືອງ: <input type="text" id="districtHeader" class="input-lg" readonly></p>
+                        <p>ບ້ານ: <input type="text" id="villageHeader" class="input-lg" readonly></p>
+                    </div>
+                    <div class="w-1/3 flex justify-end">
+                        <div class="w-24 h-32 border border-gray-400 flex items-center justify-center text-gray-500 text-xs rounded-md flex-shrink-0">
+                            ຕິດຮູບ<br>3x4
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="text-center my-3">
+                <h1 class="text-2xl font-bold text-gray-800 mb-1" style="font-family: 'Phetsarath OT', sans-serif;">ໃບຢັ້ງຢືນທີ່ຢູ່</h1>
+                <p class="text-base">ເລກທີ: <input type="text" id="certificateNo" class="input-sm text-center"></p>
+            </div>
+
+            <!-- Main Content -->
+            <main class="flex-grow">
+                <p class="mb-2">
+                    ນາຍບ້ານ: <input type="text" id="villageHeadName" class="input-xl">,
+                    ເມືອງ: <input type="text" id="villageHeadDistrict" class="input-md">,
+                    ແຂວງ: <input type="text" id="villageHeadProvince" class="input-md">
+                </p>
+                <p class="mb-2">
+                    ຂໍຢັ້ງຢືນວ່າ ທ້າວ ຫຼື ນາງ: <input type="text" id="applicantName" class="input-xxl">
+                    ອາຍຸ: <input type="text" id="applicantAge" class="input-xxs"> ປີ,
+                    ອາຊີບ: <input type="text" id="applicantOccupation" class="input-lg">
+                </p>
+                <p class="mb-2">
+                    ສັນຊາດ: <input type="text" id="applicantNationality" class="input-md" value="ລາວ">
+                </p>
+                <p class="mb-2">
+                    ປະຈຸບັນຢູ່ບ້ານ: <input type="text" id="currentVillage" class="input-lg">
+                    ຄຸ້ມ: <input type="text" id="currentQuarters" class="input-md">
+                    ໜ່ວຍ: <input type="text" id="currentUnit" class="input-xs">
+                    ເຮືອນເລກທີ: <input type="text" id="houseNo" class="input-sm">
+                </p>
+                <p class="mb-2">
+                    ໄດ້ຈົດເຂົ້າສໍາມະໂນຄົວເລກທີ: <input type="text" id="householdRegNo" class="input-md">
+                    ລົງວັນທີ<input type="text" id="regDay" class="input-xxs mx-1">ເດືອນ<input type="text" id="regMonth" class="input-xxs mx-1">ປີ<input type="text" id="regYear" class="input-xs ml-1">
+                </p>
+                <p class="mb-2">
+                    ເປັນລູກຂອງທ້າວ: <input type="text" id="fatherName" class="input-lg">
+                    ແລະ ນາງ: <input type="text" id="motherName" class="input-lg">
+                </p>
+                <p class="mb-3">
+                    ທີ່ບ້ານ: <input type="text" id="parentVillage" class="input-lg">
+                    ເມືອງ: <input type="text" id="parentDistrict" class="input-md">
+                    ແຂວງ: <input type="text" id="parentProvince" class="input-md">
+                </p>
+                <p class="mb-3">
+                    ຜູ້ກ່ຽວຢູ່ໃນຄວາມຮັບຜິດຊອບຂອງພວກເຮົາ ແລະ ຢູ່ໃນການຈັດຕັ້ງຂອງພວກເຮົາແທ້ຈິງ.<br>
+                    ດັ່ງນັ້ນ, ຈຶ່ງອອກໃບຢັ້ງຢືນສະບັບນີ້ໃຫ້ຜູ້ກ່ຽວໄວ້ເປັນຫຼັກຖານ, ຖ້າຜູ້ກ່ຽວບໍ່ມີພຶດຕິກຳທີ່ຕໍ່ຕ້ານກັບປະຊາຊົນ ແລະ ການປົກຄອງຂອງລັດແລ້ວ,<br>
+                    ຂໍໃຫ້ພະນັກງານທີ່ກ່ຽວຂ້ອງໄດ້ອໍານວຍຄວາມສະດວກຕາມທາງທີ່ຄວນດ້ວຍ.
+                </p>
+                <p class="mb-3">
+                    ໃບຢັ້ງຢືນສະບັບນີ້ໃຊ້ເພື່ອ:
+                    <textarea id="purpose" rows="1" class="input-full"></textarea>
+                </p>
+                <p class="mb-3">
+                    ແລະ ຢັ້ງຢືນວ່າຜູ້ກ່ຽວຢູ່ໃນຄວາມປົກຄອງຂອງພວກເຮົາ ຢ່າງແທ້ຈິງ.
+                </p>
+            </main>
+
+            <!-- Signature Section -->
+            <footer class="flex justify-end pt-4">
+                <div class="flex flex-col items-center w-1/2 text-center">
+                    <p class="mb-2">
+                        ວັນທີ<input type="text" id="signDay" class="input-xxs mx-1">ເດືອນ<input type="text" id="signMonth" class="input-xxs mx-1">ປີ<input type="text" id="signYear" class="input-xs ml-1">
+                    </p>
+                    <p class="font-bold mb-8">ນາຍບ້ານ</p>
+                    <p>(<input type="text" id="villageHeadSignatureName" class="input-lg text-center" readonly>)</p>
+                </div>
+            </footer>
+        </div>
+         <!-- Buttons are outside the content wrapper but inside the A4 container -->
+        <div class="flex justify-center space-x-4 mt-4" id="pdfButtonsContainer" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);">
+            <button onclick="generatePdf()" class="btn btn-primary" id="downloadPdfBtn">
+                <svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                ດາວໂຫຼດ PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        // --- DOM Element References ---
+        const downloadBtn = document.getElementById('downloadPdfBtn');
+        const purposeTextarea = document.getElementById('purpose');
+        const villageHeadNameInput = document.getElementById('villageHeadName');
+        const villageHeadSignatureNameInput = document.getElementById('villageHeadSignatureName');
+        const villageHeadDistrictInput = document.getElementById('villageHeadDistrict');
+        const villageHeadProvinceInput = document.getElementById('villageHeadProvince');
+        const currentVillageInput = document.getElementById('currentVillage');
+        const provinceHeaderInput = document.getElementById('provinceHeader');
+        const districtHeaderInput = document.getElementById('districtHeader');
+        const villageHeaderInput = document.getElementById('villageHeader');
+
+        // --- Custom Message Box Function ---
+        function showMessageBox(message, type = 'info', duration = 3000) {
+            const existingBox = document.querySelector('.message-box');
+            if (existingBox) existingBox.remove();
+
+            const messageBox = document.createElement('div');
+            messageBox.className = `message-box ${type}`;
+            messageBox.textContent = message;
+            document.body.appendChild(messageBox);
+
+            setTimeout(() => messageBox.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                messageBox.addEventListener('transitionend', () => messageBox.remove(), { once: true });
+            }, duration);
+        }
+
+        // --- Textarea Auto-Resize Function ---
+        function autoResizeTextarea() {
+            purposeTextarea.style.height = 'auto';
+            purposeTextarea.style.height = purposeTextarea.scrollHeight + 'px';
+        }
+
+        // --- Auto-population and Initialization Logic ---
+        function initializeForm() {
+            const today = new Date();
+            document.getElementById('signDay').value = String(today.getDate()).padStart(2, '0');
+            document.getElementById('signMonth').value = String(today.getMonth() + 1).padStart(2, '0');
+            document.getElementById('signYear').value = today.getFullYear();
+
+            villageHeadNameInput.addEventListener('input', () => {
+                villageHeadSignatureNameInput.value = villageHeadNameInput.value;
+            });
+
+            villageHeadProvinceInput.addEventListener('input', () => provinceHeaderInput.value = villageHeadProvinceInput.value);
+            villageHeadDistrictInput.addEventListener('input', () => districtHeaderInput.value = villageHeadDistrictInput.value);
+            currentVillageInput.addEventListener('input', () => villageHeaderInput.value = currentVillageInput.value);
+            
+            purposeTextarea.addEventListener('input', autoResizeTextarea);
+            autoResizeTextarea();
+        }
+
+        // --- PDF Generation Logic ---
+        async function generatePdf() {
+            // Changed: Target the new content-wrapper for capture
+            const formContent = document.querySelector('.content-wrapper');
+            const pdfButtonsContainer = document.getElementById('pdfButtonsContainer');
+            
+            showMessageBox('ກຳລັງສ້າງ PDF...', 'info');
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = 'ກະລຸນາລໍຖ້າ...';
+
+            pdfButtonsContainer.style.display = 'none';
+
+            try {
+                const canvas = await html2canvas(formContent, {
+                    scale: 3, 
+                    useCORS: true, 
+                    logging: false,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                const imgData = canvas.toDataURL('image/png'); 
+                
+                const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                // Changed: Define separate vertical and horizontal margins
+                const marginTopBottom = 30; // 3cm
+                const marginLeftRight = 20; // 2cm
+
+                const contentWidth = pdfWidth - (marginLeftRight * 2);
+                const contentHeight = pdfHeight - (marginTopBottom * 2);
+
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const canvasAspectRatio = canvasWidth / canvasHeight;
+                const contentAspectRatio = contentWidth / contentHeight;
+
+                let finalImgWidth, finalImgHeight;
+
+                if (canvasAspectRatio > contentAspectRatio) {
+                    finalImgWidth = contentWidth;
+                    finalImgHeight = finalImgWidth / canvasAspectRatio;
+                } else {
+                    finalImgHeight = contentHeight;
+                    finalImgWidth = finalImgHeight * canvasAspectRatio;
+                }
+
+                const x = marginLeftRight + (contentWidth - finalImgWidth) / 2;
+                const y = marginTopBottom + (contentHeight - finalImgHeight) / 2;
+
+                pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+                pdf.save('ໃບຢັ້ງຢືນທີ່ຢູ່.pdf');
+                
+                showMessageBox('ດາວໂຫຼດ PDF ສຳເລັດ!', 'success');
+
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+                showMessageBox('ເກີດຂໍ້ຜິດພາດໃນການສ້າງ PDF.', 'error');
+            } finally {
+                pdfButtonsContainer.style.display = 'flex';
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>ດາວໂຫຼດ PDF';
+            }
+        }
+
+        // --- Initialize the form when the DOM is fully loaded ---
+        document.addEventListener('DOMContentLoaded', initializeForm);
+    </script>
 </body>
 </html>
